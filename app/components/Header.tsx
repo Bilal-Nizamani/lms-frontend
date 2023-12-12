@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { FC, useState } from "react";
 import Navitems from "../utils/NavItems";
+import ThemeSwitcher from "../util/ThemeSwitcher";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -13,7 +14,7 @@ const Header: FC<Props> = (props) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 80) {
+      if (window.scrollY > 85) {
         setActive(true);
       } else {
         setActive(false);
@@ -26,7 +27,7 @@ const Header: FC<Props> = (props) => {
       <div
         className={`${
           active
-            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500 "
+            ? "dark:bg-opacity-50  dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500 "
             : "w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow"
         }`}
       >
@@ -42,6 +43,7 @@ const Header: FC<Props> = (props) => {
             </div>
             <div className="flex items-center">
               <Navitems activeItem={props.activeItem} isMobile={false} />
+              <ThemeSwitcher />
             </div>
           </div>
         </div>
