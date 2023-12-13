@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { FC, useState } from "react";
 import Navitems from "../utils/NavItems";
-import ThemeSwitcher from "../util/ThemeSwitcher";
+import ThemeSwitcher from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 type Props = {
   open: boolean;
@@ -60,7 +60,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
               </div>
               <HiOutlineUserCircle
                 size={25}
-                className="cursor-pointer dark:text-white text-black"
+                className="cursor-pointer 800px:block hidden dark:text-white text-black"
                 onClick={() => setOpen(true)}
               />
             </div>
@@ -85,6 +85,11 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
                   setOpen(true);
                 }}
               />
+              <br />
+              <br />
+              <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
+                Copyright c 2023 Elearning
+              </p>
             </div>
           </div>
         )}
