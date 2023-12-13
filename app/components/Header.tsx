@@ -3,13 +3,14 @@ import Link from "next/link";
 import React, { FC, useState } from "react";
 import Navitems from "../utils/NavItems";
 import ThemeSwitcher from "../util/ThemeSwitcher";
+import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
 };
 
-const Header: FC<Props> = (props) => {
+const Header: FC<Props> = ({ activeItem, setOpen }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   if (typeof window !== "undefined") {
@@ -21,6 +22,11 @@ const Header: FC<Props> = (props) => {
       }
     });
   }
+  const handleClose = (e: any) => {
+    if (e.target.id === "screen") {
+      setOpenSidebar(false);
+    }
+  };
 
   return (
     <div className="w-full relative">
@@ -42,11 +48,46 @@ const Header: FC<Props> = (props) => {
               </Link>
             </div>
             <div className="flex items-center">
-              <Navitems activeItem={props.activeItem} isMobile={false} />
+              <Navitems activeItem={activeItem} isMobile={false} />
               <ThemeSwitcher />
+              {/* only for mobile */}
+              <div className="800px:hidden">
+                <HiOutlineMenuAlt3
+                  size={25}
+                  className="cursor-pointer dark:text-white text-black"
+                  onClick={() => setOpenSidebar(true)}
+                />
+              </div>
+              <HiOutlineUserCircle
+                size={25}
+                className="cursor-pointer dark:text-white text-black"
+                onClick={() => setOpen(true)}
+              />
             </div>
           </div>
         </div>
+        {/* mobile side bar */}
+        {openSidebar && (
+          <div
+            onClick={handleClose}
+            id="screen"
+            className="fixed w-full h-screen top-0 left-0 z-[99999] dark:bg-[unset]"
+          >
+            <div
+              onClick={handleClose}
+              id="screen"
+              className=" w-[70vw] fixed z-[99999999999] h-screen bg-white  dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0"
+            >
+              <Navitems activeItem={activeItem} isMobile={true} />
+              <HiOutlineUserCircle
+                className="curson-pointer ml-5 my-2 text-black dark:text-white"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
