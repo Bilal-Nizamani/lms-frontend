@@ -34,19 +34,37 @@ body {
   100% {
     opacity: 1;
   }
-  16.67% {
-    opacity: 0.9;
+  9% {
+    opacity: 0.91;
   }
-  33.33% {
-    opacity: 0.8;
+  18% {
+    opacity: 0.82;
   }
-  50% {
-    opacity: 0.6;
+  27% {
+    opacity: 0.73;
   }
-  66.67% {
-    opacity: 0.5;
+  36% {
+    opacity: 0.64;
   }
-  83.33% {
-    opacity: 0.4;
+  45% {
+    opacity: 0.55;
+  }
+  54% {
+    opacity: 0.64;
+  }
+  63% {
+    opacity: 0.73;
+  }
+  72% {
+    opacity: 0.82;
+  }
+  81% {
+    opacity: 0.91;
+  }
+  90% {
+    opacity: 0.99;
+  }
+  95% {
+    opacity: 0.995;
   }
 }
