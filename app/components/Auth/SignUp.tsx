@@ -14,10 +14,11 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
-  Name: Yup.string().required("Please enter your name!"),
-  Email: Yup.string()
-    .email("invalid emaiol!")
+  name: Yup.string().required("Please enter your name!"),
+  email: Yup.string()
+    .email("invalid email!")
     .required("Please enter your email"),
+  password: Yup.string().required("Please enter password"),
 });
 
 const SignUp: FC<Props> = ({ setRoute }) => {
@@ -26,7 +27,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      console.log(email, password);
+      console.log("sumbit wroking");
       setRoute("Verification");
     },
   });
@@ -56,7 +57,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
         <label className={`${styles.title}`}>Enter your Email</label>
         <input
           type="email"
-          name=""
+          name="Email"
           value={values.email}
           onChange={handleChange}
           id="email"

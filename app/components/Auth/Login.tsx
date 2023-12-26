@@ -14,9 +14,10 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
-  Email: Yup.string()
+  email: Yup.string()
     .email("invalid emaiol!")
     .required("Please enter your email"),
+  passwrd: Yup.string().required("Please enter Password"),
 });
 
 const Login: FC<Props> = ({ setRoute }) => {
@@ -28,10 +29,9 @@ const Login: FC<Props> = ({ setRoute }) => {
       console.log(email, password);
     },
   });
-  // console.log(show);
   const { errors, touched, values, handleChange, handleSubmit } = formik;
 
-  // console.log(handleSubmit);
+  console.log(errors);
   return (
     <div className="w-full">
       <h1 className={`${styles.title}`}>Login With Bilal Courses</h1>

@@ -2,7 +2,6 @@ import React, { FC, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { styles } from "@/app/styles/style";
-import { Anybody } from "next/font/google";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -32,7 +31,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
     4: "",
   });
   const VerificationHandler = async () => {
-    console.log("test");
+    setInvalidError(true);
   };
   const handleInputChange = (index: number, value: string) => {
     setInvalidError(false);
@@ -56,10 +55,10 @@ const Verification: FC<Props> = ({ setRoute }) => {
       </div>
       <br />
       <br />
-      <div className="1100px:w-[70%] m-auto flex items-center justify-around">
+      <div className=" m-auto flex items-center justify-around">
         {Object.keys(VerifyNumber).map((key, index): any => {
           <input
-            type="text"
+            type="number"
             key={key}
             className={`w-[65px] bg-transparent border-[13px] rounder=[10px] flex items-center text-black dark:text-white justify-center text-[18px] font-Poppins outline-none text-center ${
               invalidError
@@ -67,9 +66,27 @@ const Verification: FC<Props> = ({ setRoute }) => {
                 : "dark:border-wihte border-[#0000004a]"
             } `}
             ref={inputRefs[index]}
+            placeholder=""
+            maxLength={1}
+            value={VerifyNumber[key as keyof VerifyNumber]}
+            onChange={(e) => {
+              handleInputChange(index, e.target.value);
+            }}
           />;
         })}
       </div>
+      <br />
+      <br />
+      <div className="w-full flex justify-center">
+        <button className={styles.button} onClick={VerificationHandler}>
+          Verify OTP
+        </button>
+      </div>
+      <br />
+      <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
+        <span className="text-[#2190ff] pl-2"> Go back to sign in?</span>
+        Sign in
+      </h5>
     </div>
   );
 };
