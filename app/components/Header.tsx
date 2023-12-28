@@ -7,7 +7,6 @@ import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
-import Verfication from "../components/Auth/Verification";
 import Verification from "../components/Auth/Verification";
 type Props = {
   open: boolean;
