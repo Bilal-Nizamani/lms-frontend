@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { styles } from "@/app/styles/style";
+
 import * as Yup from "yup";
 import {
   AiOutlineEye,
@@ -24,7 +25,7 @@ const schema = Yup.object().shape({
 
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 const SignUp: FC<Props> = ({ setRoute }) => {
-  const [register, { isError, isSuccess, data, error }] = useRegisterMutation();
+  const [register, { isSuccess, data, error }] = useRegisterMutation();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -36,7 +37,6 @@ const SignUp: FC<Props> = ({ setRoute }) => {
     if (error) {
       if ("data" in error) {
         const errorData = error as any;
-        console.log(errorData.data.message);
         toast.error(errorData.data.message);
       }
     }
@@ -44,7 +44,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
-    onSubmit: async ({ email, password }) => {
+    onSubmit: async ({ name, email, password }) => {
       const data = { name, email, password };
       await register(data);
     },

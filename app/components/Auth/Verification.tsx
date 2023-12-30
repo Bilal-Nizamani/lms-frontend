@@ -1,49 +1,56 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { styles } from "@/app/styles/style";
+import { useActivationMutation } from "@/redux/features/auth/authApi";
+import { useAppSelector } from "../hooks";
 
 type Props = {
   setRoute: (route: string) => void;
 };
 
-type VerifyNumber = {
-  "0": string;
-  "1": string;
-  "2": string;
-  "3": string;
-  "4": string;
-};
-
 const Verification: FC<Props> = ({ setRoute }) => {
   const [invalidError, setInvalidError] = useState<boolean>(false);
-  const inputRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
-  const [VerifyNumber, setVerifyNumber] = useState<VerifyNumber>({
-    0: "",
-    1: "",
-    2: "",
-    3: "",
-    4: "",
+  const [activaton, { isError, isSuccess, data, error }] =
+    useActivationMutation();
+  const authToken = useAppSelector((state) => {
+    return state.auth.token;
   });
+
+  const [VerifyNumber, setVerifyNumber] = useState<string>();
   const VerificationHandler = async () => {
-    setInvalidError(true);
+    console.log(VerifyNumber);
+    if ((VerifyNumber && VerifyNumber?.length < 4) || !VerifyNumber) {
+      setInvalidError(true);
+    }
+    await activaton({
+      activation_token: authToken,
+      activation_code: VerifyNumber,
+    });
   };
-  const handleInputChange = (index: number, value: string) => {
-    setInvalidError(false);
-    const newVerifyNumber = { ...VerifyNumber, [index]: value };
-    setVerifyNumber(newVerifyNumber);
-    if (value === "" && index > 0) {
-      inputRefs[index - 1].current?.focus();
-    } else if (value.length === 1 && index < 3) {
-      inputRefs[index + 1].current?.focus();
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || "Registration Successful";
+      toast.success(message);
+      setRoute("Verification");
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccess, setRoute, error, data]);
+  let nums = ["1", "2", "3", "4", "5", "6", "7", "", "9", "0"];
+  const handleInputChange = (value: string) => {
+    // Check if the input is numeric
+    if (nums.includes(value.charAt(value.length - 1))) {
+      setVerifyNumber(value);
+      console.log(value);
+    } else {
+      setVerifyNumber(VerifyNumber);
     }
   };
-  // const VerificationHandler;
   return (
     <div>
       <h1 className={`${styles.title}`}> Verify Your Account </h1>
@@ -56,24 +63,22 @@ const Verification: FC<Props> = ({ setRoute }) => {
       <br />
       <br />
       <div className=" m-auto flex items-center justify-around">
-        {Object.keys(VerifyNumber).map((key, index): any => {
-          <input
-            type="number"
-            key={key}
-            className={`w-[65px] bg-transparent border-[13px] rounder=[10px] flex items-center text-black dark:text-white justify-center text-[18px] font-Poppins outline-none text-center ${
-              invalidError
-                ? "shake border-red-500"
-                : "dark:border-wihte border-[#0000004a]"
-            } `}
-            ref={inputRefs[index]}
-            placeholder=""
-            maxLength={1}
-            value={VerifyNumber[key as keyof VerifyNumber]}
-            onChange={(e) => {
-              handleInputChange(index, e.target.value);
-            }}
-          />;
-        })}
+        <input
+          type="text"
+          inputMode="numeric" // Restrict input to numeric characters
+          pattern="[0-9]*" // Allow only numeric input
+          className={`dark:border-white text-white h-[80px] text-5xl max-w-[200px] text-center tracking-[15px] rounded-full   ${
+            invalidError
+              ? "shake border-red-500"
+              : "dark:border-white border-[#0000004a]"
+          } `}
+          placeholder=""
+          maxLength={4}
+          value={VerifyNumber}
+          onChange={(e) => {
+            handleInputChange(e.target.value);
+          }}
+        />
       </div>
       <br />
       <br />

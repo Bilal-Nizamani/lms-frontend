@@ -25,6 +25,7 @@ const Page: FC<Props> = (props) => {
         setRoute={setRoute}
         route={route}
       />
+      {/* <Verification /> */}
       <Hero />
     </div>
   );
