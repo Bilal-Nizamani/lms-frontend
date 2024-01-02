@@ -8,6 +8,7 @@ import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
+import { useAppSelector } from "./hooks";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -19,6 +20,7 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const user = useAppSelector((state) => state.auth);
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 85) {
@@ -33,6 +35,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       setOpenSidebar(false);
     }
   };
+  console.log(user);
 
   return (
     <div className="w-full relative">

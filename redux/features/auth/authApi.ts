@@ -1,5 +1,7 @@
+import build from "next/dist/build";
 import { apiSlice } from "../api/apiSlice";
-import { userRegistration } from "./authSlice";
+import { userRegistration, userLoggedIn } from "./authSlice";
+import { TrySharp } from "@mui/icons-material";
 
 type RegistrationResponse = {
   message: string;
@@ -40,7 +42,26 @@ export const authApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+    login: builder.mutation({
+      query: ({ email, password }) => {
+        return { url: "login", method: "POST", body: { email, password } };
+      },
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.token,
+              user: result.data.user,
+            })
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useActivationMutation } = authApi;
+export const { useRegisterMutation, useActivationMutation, useLoginMutation } =
+  authApi;

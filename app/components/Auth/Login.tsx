@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { styles } from "@/app/styles/style";
 import * as Yup from "yup";
@@ -8,25 +8,46 @@ import {
   AiOutlineEyeInvisible,
   AiFillGithub,
 } from "react-icons/ai";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { FcGoogle } from "react-icons/fc";
+import toast from "react-hot-toast";
 type Props = {
   setRoute: (route: string) => void;
+  setOpen: (open: boolean) => void;
 };
 
 const schema = Yup.object().shape({
   email: Yup.string()
     .email("invalid emaiol!")
     .required("Please enter your email"),
-  passwrd: Yup.string().required("Please enter Password"),
+  password: Yup.string().required("Please enter Password"),
 });
 
-const Login: FC<Props> = ({ setRoute }) => {
+const Login: FC<Props> = ({ setRoute, setOpen }) => {
   const [show, setShow] = useState(false);
+  const [login, { isSuccess, data, error }] = useLoginMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || "Registration Successful";
+      toast.success(message);
+      // setRoute("");
+      setOpen(false);
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccess, error, setOpen, data]);
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
       console.log(email, password);
+      await login({ email, password });
     },
   });
   const { errors, touched, values, handleChange, handleSubmit } = formik;
@@ -55,6 +76,7 @@ const Login: FC<Props> = ({ setRoute }) => {
           <label className={`${styles.title}`}>Enter your password</label>
           <input
             type={show ? "text" : "password"}
+            value={values.password}
             name="password"
             placeholder="password"
             id="password"
