@@ -3,8 +3,10 @@ import { userLoggedIn } from "../auth/authSlice";
 
 export const apiSlice = createApi({
   reducerPath: "api",
+
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/v1",
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     refreshToken: builder.query({
@@ -13,6 +15,14 @@ export const apiSlice = createApi({
         method: "GET",
         credentials: "include" as const,
       }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(userLoggedIn({ accessToken: result.data.accessToken }));
+        } catch (err) {
+          console.log(err);
+        }
+      },
     }),
     loadUser: builder.query({
       query: (data) => ({
@@ -25,7 +35,6 @@ export const apiSlice = createApi({
           const result = await queryFulfilled;
           dispatch(
             userLoggedIn({
-              accessToken: result.data.accessToken,
               user: result.data.user,
             })
           );

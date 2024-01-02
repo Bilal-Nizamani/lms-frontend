@@ -46,13 +46,11 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      console.log(email, password);
       await login({ email, password });
     },
   });
   const { errors, touched, values, handleChange, handleSubmit } = formik;
 
-  console.log(errors);
   return (
     <div className="w-full">
       <h1 className={`${styles.title}`}>Login With Bilal Courses</h1>

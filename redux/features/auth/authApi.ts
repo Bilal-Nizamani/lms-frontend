@@ -1,7 +1,5 @@
-import build from "next/dist/build";
 import { apiSlice } from "../api/apiSlice";
 import { userRegistration, userLoggedIn } from "./authSlice";
-import { TrySharp } from "@mui/icons-material";
 
 type RegistrationResponse = {
   message: string;
@@ -51,7 +49,7 @@ export const authApi = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
           dispatch(
             userLoggedIn({
-              accessToken: result.data.token,
+              accessToken: result.data.accessToken,
               user: result.data.user,
             })
           );
