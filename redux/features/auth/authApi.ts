@@ -42,8 +42,37 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     login: builder.mutation({
       query: ({ email, password }) => {
-        return { url: "login", method: "POST", body: { email, password } };
+        return {
+          url: "login",
+          method: "POST",
+          body: { email, password },
+          credentials: "include" as const,
+        };
       },
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.accessToken,
+              user: result.data.user,
+            })
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    }),
+    SocialAuth: builder.mutation({
+      query: ({ email, name, avatar }) => {
+        return {
+          url: "social-auth",
+          method: "POST",
+          body: { email, name, avatar },
+          credentials: "include" as const,
+        };
+      },
+
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;

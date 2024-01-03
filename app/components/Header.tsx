@@ -20,7 +20,7 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const user = useAppSelector((state) => state.auth);
+  const token = useAppSelector((state) => state.auth.token);
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 85) {
@@ -35,7 +35,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       setOpenSidebar(false);
     }
   };
-  console.log(user);
 
   return (
     <div className="w-full relative">
@@ -67,11 +66,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              <HiOutlineUserCircle
-                size={25}
-                className="cursor-pointer 800px:block hidden dark:text-white text-black"
-                onClick={() => setOpen(true)}
-              />
+              {token ? (
+                <Link href={"./profile"}>PROFILE</Link>
+              ) : (
+                <HiOutlineUserCircle
+                  size={25}
+                  className="cursor-pointer 800px:block hidden dark:text-white text-black"
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           </div>
         </div>

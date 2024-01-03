@@ -11,6 +11,7 @@ import {
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 type Props = {
   setRoute: (route: string) => void;
   setOpen: (open: boolean) => void;
@@ -108,8 +109,24 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
           Or Join With
         </h5>
         <div className="flex items-center justify-center my-3">
-          <FcGoogle size={30} className="cursor-pointer mr-2" />
-          <AiFillGithub size={30} className="cursor-pointer mr-2" />
+          <FcGoogle
+            size={30}
+            onClick={() => {
+              console.log("hellow");
+              signIn("google");
+              console.log("google");
+            }}
+            className="cursor-pointer mr-2"
+          />
+
+          <AiFillGithub
+            size={30}
+            onClick={() => {
+              console.log("helow");
+              signIn("github");
+            }}
+            className="cursor-pointer mr-2"
+          />
         </div>
         <h5 className="text-center pt-4 dark:text-white font-Poppins text-[14px]">
           Not have any account?
