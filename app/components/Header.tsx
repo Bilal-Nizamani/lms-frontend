@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Navitems from "../utils/NavItems";
 import ThemeSwitcher from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
@@ -9,6 +9,9 @@ import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
 import { useAppSelector } from "./hooks";
+import { useSession } from "next-auth/react";
+import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import toast from "react-hot-toast";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -20,7 +23,26 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { data } = useSession();
   const token = useAppSelector((state) => state.auth.token);
+
+  const [soccialAuth, { isSuccess, error }] = useSocialAuthMutation();
+
+  useEffect(() => {
+    if (!token) {
+      if (data) {
+        soccialAuth({
+          email: data?.user?.email,
+          name: data?.user?.name,
+          avatar: data.user?.image,
+        });
+      }
+    }
+    if (isSuccess) {
+      toast.success("Login Successfully");
+    }
+  }, [data, isSuccess, token, soccialAuth]);
+
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 85) {
