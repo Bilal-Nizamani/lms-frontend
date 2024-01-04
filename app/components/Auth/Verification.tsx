@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import { styles } from "@/app/styles/style";
 import { useActivationMutation } from "@/redux/features/auth/authApi";
-import { useAppSelector } from "../hooks";
+import { useAppSelector } from "../customHooks/hooks";
 
 type Props = {
   setRoute: (route: string) => void;
