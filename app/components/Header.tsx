@@ -11,6 +11,7 @@ import Verification from "../components/Auth/Verification";
 import { useAppSelector } from "./customHooks/hooks";
 import { useSession } from "next-auth/react";
 import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useLogOutQuery } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
 type Props = {
   open: boolean;
@@ -24,6 +25,11 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const { data } = useSession();
+  const [logout, setLogOut] = useState(false);
+
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
   const token = useAppSelector((state) => state.auth.token);
 
   const [soccialAuth, { isSuccess, error }] = useSocialAuthMutation();
@@ -38,8 +44,12 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         });
       }
     }
-    if (isSuccess) {
+    if (isSuccess && data === null) {
       toast.success("Login Successfully");
+    }
+
+    if (data === null) {
+      setLogOut(true);
     }
   }, [data, isSuccess, token, soccialAuth]);
 

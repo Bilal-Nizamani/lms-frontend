@@ -6,5 +6,6 @@ interface Protected {
 }
 export default function Protected({ children }: Protected) {
   const isAuthenticated = useAuth();
+  console.log(isAuthenticated);
   return isAuthenticated ? children : redirect("/");
 }
